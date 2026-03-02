@@ -17,11 +17,11 @@ import (
 var content embed.FS
 
 type User struct {
-	Username   string
-	PrivKey    [32]byte
-	PubKey     [32]byte
-	Color      string
-	IsShadowed bool
+	Username    string
+	PrivKey     [32]byte
+	PubKey      [32]byte
+	Color       string
+	ShadowUntil time.Time
 }
 
 type Message struct {
@@ -42,7 +42,7 @@ var (
 	mu          sync.RWMutex
 )
 
-// addLog verwendet mu.Lock(). Darf nie innerhalb eines anderen Locks aufgerufen werden!
+// addLog verwendet mu.Lock().
 func addLog(category, message string) {
 	mu.Lock()
 	defer mu.Unlock()
@@ -184,7 +184,7 @@ func main() {
 			senderUser, senderExists := users[m.Sender]
 			mu.RUnlock()
 
-			if senderExists && senderUser.IsShadowed {
+			if senderExists && time.Now().Before(senderUser.ShadowUntil) {
 				if currentUser == nil || currentUser.Username != m.Sender {
 					show = false
 				}
@@ -320,10 +320,22 @@ func main() {
 				targetToShadow := myTrimPrefix(text, "/shadow ")
 				mu.Lock()
 				if u, exists := users[targetToShadow]; exists {
-					u.IsShadowed = true
+					u.ShadowUntil = time.Now().Add(12 * time.Hour)
+					addLog("ADMIN", "stk shadow-banned user: "+targetToShadow)
 				}
 				mu.Unlock()
-				addLog("ADMIN", "stk shadow-banned user: "+targetToShadow)
+				http.Redirect(w, r, "/input", http.StatusSeeOther)
+				return
+			}
+
+			if senderName == "stk" && myHasPrefix(text, "/unshadow ") {
+				targetToUnshadow := myTrimPrefix(text, "/unshadow ")
+				mu.Lock()
+				if u, exists := users[targetToUnshadow]; exists {
+					u.ShadowUntil = time.Time{}
+				}
+				mu.Unlock()
+				addLog("ADMIN", "stk removed shadow-ban for: "+targetToUnshadow)
 				http.Redirect(w, r, "/input", http.StatusSeeOther)
 				return
 			}
