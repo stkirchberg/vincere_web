@@ -78,7 +78,6 @@ h1 {
 
 .private-fields-container {
     display: none;
-    margin-top: 15px;
     margin-bottom: 30px;
     padding: 15px;
     background: rgba(0, 255, 0, 0.05);
@@ -91,6 +90,7 @@ h1 {
 .toggle-label {
     display: inline-block;
     margin: 10px 0;
+    margin-bottom: 30px;
     padding: 10px 20px;
     background: #1a1a1a;
     color: lime;
@@ -113,7 +113,6 @@ h1 {
     margin: 50px auto;
     padding: 20px;
     background: #000;
-    border: 1px solid #333;
     text-align: center;
 }
 
