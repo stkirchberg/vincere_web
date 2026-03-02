@@ -89,8 +89,8 @@ h1 {
 
 .toggle-label {
     display: inline-block;
-    margin: 10px 0;
-    margin-bottom: 30px;
+    margin-top: 10px;
+    margin-bottom: 20px;
     padding: 10px 20px;
     background: #1a1a1a;
     color: lime;
