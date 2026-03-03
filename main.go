@@ -301,7 +301,7 @@ func main() {
 
 		welcomeMsg := Message{
 			Sender: "SYSTEM", Target: "all",
-			Content:   fmt.Sprintf("Hello %s!\nWelcome to vincere.", name),
+			Content:   fmt.Sprintf("Hello %s!\nWelcome to vincere.\nPlease note: No CSAM. No spamming.", name),
 			Timestamp: time.Now(), IsEncrypted: false, Color: "#fff762",
 		}
 
