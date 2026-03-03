@@ -76,7 +76,6 @@ func main() {
 	tmpl := template.Must(template.ParseFS(content, "templates/*.html"))
 	StartRoomCleanup()
 
-	// Cleanup Routine für alte Nachrichten
 	go func() {
 		for {
 			time.Sleep(1 * time.Minute)
@@ -166,10 +165,27 @@ func main() {
 				currentUser = users[name]
 			}
 		}
-
-		rawHistory := make([]Message, len(chatHistory))
-		copy(rawHistory, chatHistory)
 		mu.RUnlock()
+
+		var rawHistory []Message
+
+		if currentUser != nil && currentUser.ActiveRoom != "" {
+			roomsMu.RLock()
+			room, exists := rooms[currentUser.ActiveRoom]
+			roomsMu.RUnlock()
+
+			if exists {
+				room.Mu.RLock()
+				rawHistory = make([]Message, len(room.Messages))
+				copy(rawHistory, room.Messages)
+				room.Mu.RUnlock()
+			}
+		} else {
+			mu.RLock()
+			rawHistory = make([]Message, len(chatHistory))
+			copy(rawHistory, chatHistory)
+			mu.RUnlock()
+		}
 
 		var filtered []Message
 		for _, m := range rawHistory {
