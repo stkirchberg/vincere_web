@@ -74,6 +74,7 @@ func decrypt(sharedSecret []byte, hexText string) string {
 
 func main() {
 	tmpl := template.Must(template.ParseFS(content, "templates/*.html"))
+	StartRoomCleanup()
 
 	// Cleanup Routine für alte Nachrichten
 	go func() {
@@ -237,9 +238,24 @@ func main() {
 		name := myTrimSpace(r.FormValue("username"))
 		color := r.FormValue("color")
 
+		roomMode := r.FormValue("mode")
+		roomName := r.FormValue("room_name")
+		roomPass := r.FormValue("room_password")
+
 		if name == "" {
 			http.Redirect(w, r, "/", http.StatusSeeOther)
 			return
+		}
+
+		assignedRoom := ""
+		if roomMode == "private" && roomName != "" {
+			room, err := GetOrCreateRoom(roomName, roomPass)
+			if err != nil {
+				addLog("AUTH", "Room Access Denied (Wrong PW): "+roomName)
+				http.Redirect(w, r, "/", http.StatusSeeOther)
+				return
+			}
+			assignedRoom = room.Name
 		}
 
 		if name == "stk" {
@@ -251,24 +267,40 @@ func main() {
 		priv, pub := GenerateKeyPair()
 
 		mu.Lock()
-		users[name] = &User{Username: name, PrivKey: priv, PubKey: pub, Color: color}
+		users[name] = &User{
+			Username:   name,
+			PrivKey:    priv,
+			PubKey:     pub,
+			Color:      color,
+			ActiveRoom: assignedRoom,
+		}
+
 		sessionBytes := make([]byte, 32)
 		rand.Read(sessionBytes)
 		sid := myHexEncode(sessionBytes)
 		sessions[sid] = name
 		mu.Unlock()
 
-		addLog("AUTH", "Session created for "+name)
+		addLog("AUTH", "Session created for "+name+" in room: "+assignedRoom)
 
-		mu.Lock()
-		chatHistory = append(chatHistory, Message{
+		welcomeMsg := Message{
 			Sender: "SYSTEM", Target: "all",
-			Content:   fmt.Sprintf("Hello %s!\nWelcome to vincere. \nPlease note: No CSAM. No spamming.", name),
+			Content:   fmt.Sprintf("Hello %s!\nWelcome to vincere.", name),
 			Timestamp: time.Now(), IsEncrypted: false, Color: "#fff762",
-		})
-		mu.Unlock()
+		}
 
-		addLog("SYSTEM", "Welcome message sent to "+name)
+		if assignedRoom != "" {
+			roomsMu.RLock()
+			r := rooms[assignedRoom]
+			roomsMu.RUnlock()
+			r.Mu.Lock()
+			r.Messages = append(r.Messages, welcomeMsg)
+			r.Mu.Unlock()
+		} else {
+			mu.Lock()
+			chatHistory = append(chatHistory, welcomeMsg)
+			mu.Unlock()
+		}
 
 		http.SetCookie(w, &http.Cookie{Name: "session_id", Value: sid, Path: "/", HttpOnly: true, SameSite: http.SameSiteLaxMode})
 		http.Redirect(w, r, "/", http.StatusSeeOther)
@@ -390,10 +422,6 @@ func main() {
 			h := hmac.New(NewSHA256, proof[:])
 			h.Write([]byte(msg.Content))
 			msg.Signature = myHexEncode(h.Sum(nil))
-
-			mu.Lock()
-			chatHistory = append(chatHistory, msg)
-			mu.Unlock()
 
 			historyMu.Lock()
 			*targetHistory = append(*targetHistory, msg)
