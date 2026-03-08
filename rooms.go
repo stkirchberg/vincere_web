@@ -41,7 +41,7 @@ func StartRoomCleanup() {
 	}()
 }
 
-func GetOrCreateRoom(name, password string) (*Room, error) {
+func GetOrCreateRoom(name, password, creator string) (*Room, error) {
 	roomsMu.Lock()
 	defer roomsMu.Unlock()
 
@@ -58,7 +58,7 @@ func GetOrCreateRoom(name, password string) (*Room, error) {
 			LastActivity: time.Now(),
 		}
 		rooms[name] = newRoom
-		addLog("ADMIN", "New private room created: "+name)
+		addLog("ADMIN", "New private room created for "+creator)
 		return newRoom, nil
 	}
 
