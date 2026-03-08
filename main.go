@@ -297,7 +297,11 @@ func main() {
 		sessions[sid] = name
 		mu.Unlock()
 
-		addLog("AUTH", "Session created for "+name+" in room: "+assignedRoom)
+		if assignedRoom != "" {
+			addLog("AUTH", "Session created for "+name+" in private room")
+		} else {
+			addLog("AUTH", "Session created for "+name+" in public chat")
+		}
 
 		welcomeMsg := Message{
 			Sender: "SYSTEM", Target: "all",
