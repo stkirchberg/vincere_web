@@ -382,14 +382,20 @@ func main() {
 				mu.Lock()
 				if u, exists := users[targetToUnshadow]; exists {
 					u.ShadowUntil = time.Time{}
+					addLog("ADMIN", "stk removed shadow-ban for: "+targetToUnshadow)
 				}
 				mu.Unlock()
-				addLog("ADMIN", "stk removed shadow-ban for: "+targetToUnshadow)
 				http.Redirect(w, r, "/input", http.StatusSeeOther)
 				return
 			}
 
-			msg := Message{Sender: senderName, Content: text, Timestamp: time.Now(), Target: "all", Color: sender.Color}
+			msg := Message{
+				Sender:    senderName,
+				Content:   text,
+				Timestamp: time.Now(),
+				Target:    "all",
+				Color:     sender.Color,
+			}
 
 			if myHasPrefix(text, "@") {
 				parts := mySplitN(text, " ", 2)
@@ -404,32 +410,7 @@ func main() {
 					msg.Content = encrypt(shared[:], parts[1])
 					msg.Target = targetName
 					msg.IsEncrypted = true
-					addLog("MSG", "IGE E2EE stored.")
-				} else {
-					addLog("MSG", "Public message from "+senderName)
 				}
-			} else {
-				addLog("MSG", "Public message from "+senderName)
-			}
-
-			roomName := sender.ActiveRoom
-			var targetHistory *[]Message
-			var historyMu *sync.RWMutex
-
-			if roomName != "" {
-				roomsMu.RLock()
-				r, exists := rooms[roomName]
-				roomsMu.RUnlock()
-				if exists {
-					targetHistory = &r.Messages
-					historyMu = &r.Mu
-					r.Mu.Lock()
-					r.LastActivity = time.Now()
-					r.Mu.Unlock()
-				}
-			} else {
-				targetHistory = &chatHistory
-				historyMu = &mu
 			}
 
 			var base [32]byte
@@ -439,9 +420,24 @@ func main() {
 			h.Write([]byte(msg.Content))
 			msg.Signature = myHexEncode(h.Sum(nil))
 
-			historyMu.Lock()
-			*targetHistory = append(*targetHistory, msg)
-			historyMu.Unlock()
+			if sender.ActiveRoom != "" {
+				roomsMu.RLock()
+				r, exists := rooms[sender.ActiveRoom]
+				roomsMu.RUnlock()
+
+				if exists {
+					r.Mu.Lock()
+					r.Messages = append(r.Messages, msg)
+					r.LastActivity = time.Now()
+					r.Mu.Unlock()
+					addLog("MSG", fmt.Sprintf("Room [%s]: Message from %s", r.Name, senderName))
+				}
+			} else {
+				mu.Lock()
+				chatHistory = append(chatHistory, msg)
+				mu.Unlock()
+				addLog("MSG", "Public message from "+senderName)
+			}
 		}
 		http.Redirect(w, r, "/input", http.StatusSeeOther)
 	})
