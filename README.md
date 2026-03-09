@@ -12,7 +12,7 @@
 
 ---
 
-## 🌐 Live Demo (Tor Network)
+## Live Demo (Tor Network)
 
 > [!IMPORTANT]
 > To access the live instance of **vincere**, you must use the **Tor Browser** or a **Brave Private Window with Tor**. <br>
