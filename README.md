@@ -122,6 +122,14 @@ For symmetric encryption, `vincere` utilizes the AES block cipher in IGE mode. T
     $c_i = f_K(p_i \oplus c_{i-1}) \oplus p_{i-1}$
 * **Initialization Vector (IV)**: The implementation uses a 32-byte IV (consisting of two 16-byte blocks) to initialize the XOR chains, ensuring that identical plaintexts result in different ciphertexts.
 
+
+### 6. Network Infrastructure: Tor & Anonymity
+
+To further protect user metadata, **vincere** is designed to operate as a Tor Hidden Service (`.onion`).
+
+* **Metadata Protection**: By routing traffic through the Tor network, the server never learns the real IP addresses of the clients, and the clients do not rely on centralized Certificate Authorities (CAs).
+* **End-to-End Integrity**: The `.onion` address itself is a hash of the service's public key, providing a self-authenticating layer that complements the internal E2EE.
+
 ---
 
 ### Transitioning to Standard Libraries
