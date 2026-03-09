@@ -12,13 +12,15 @@
 
 ---
 
-## Live Demo (Tor Network)
+## 🌐 Live Demo (Tor Network)
 
 > [!IMPORTANT]
-> To access the live instance of **vincere**, you must use the **Tor Browser**.<br>
+> To access the live instance of **vincere**, you must use the **Tor Browser** or a **Brave Private Window with Tor**. 
 > Standard browsers (Chrome, Firefox, etc.) will not be able to resolve this address.
 
-**Onion Address:** [http://vincere3v6uwymckmwdhvjhhs2ogilqh2aejfjays74fmj4jyjufqmid.onion/](http://vincere3v6uwymckmwdhvjhhs2ogilqh2aejfjays74fmj4jyjufqmid.onion/)
+**Onion Address:** <a href="http://vincere3v6uwymckmwdhvjhhs2ogilqh2aejfjays74fmj4jyjufqmid.onion/" target="_blank" rel="noopener noreferrer">
+  vincere3v6uwymckmwdhvjhhs2ogilqh2aejfjays74fmj4jyjufqmid.onion
+</a>
 
 ---
 
