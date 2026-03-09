@@ -99,9 +99,32 @@ As this is a "self-rolled" implementation, it serves as a learning tool rather t
 * **No Formal Verification**: Unlike standard libraries, this code has not been formally verified or audited for mathematical errors.
 * **In-Memory Storage**: Keys are stored in a Go map, making them potentially recoverable from a memory dump if the server is compromised.
 
+
+
+### 5. Hashing & Symmetric Encryption (SHA-256 & AES-IGE)
+
+In addition to the curve arithmetic, `vincere` implements the hashing and symmetric encryption layers from scratch to provide a transparent cryptographic pipeline.
+
+#### SHA-256 & HMAC
+The integrity of messages and the derivation of signatures are handled by a custom SHA-256 implementation following the Merkle-Damgård construction.
+
+* **Block Compression**: The implementation in `sha256.go` manually handles the message padding, the 64-round compression function, and the specific constant $K$ values.
+* **HMAC Authentication**: To verify message authenticity, `NewHMAC` is used. It applies the nested hashing construction ($H(K \oplus opad \parallel H(K \oplus ipad \parallel text))$) to ensure that messages cannot be tampered with.
+* **Constant-Time Verification**: The `CheckMAC` function utilizes `myConstantTimeCompare` to compare the expected MAC with the received signature, mitigating timing attacks on the authentication layer.
+
+
+
+#### AES-IGE (Infinite Garble Extension)
+For symmetric encryption, `vincere` utilizes the AES block cipher in IGE mode. This mode is notable for its error-propagation properties and its historical use in protocols like MTProto.
+
+* **AES Core**: The `aes-ige.go` file contains a manual implementation of the AES block cipher, including the S-Box substitution (`subBytes`), row shifting (`shiftRows`), and Galois Field multiplication (`gfMul`) for the `mixColumns` step.
+* **IGE Mode Logic**: Unlike standard CBC, IGE mode XORs the previous ciphertext block with the current plaintext, and the previous plaintext block with the current ciphertext:
+    $c_i = f_K(p_i \oplus c_{i-1}) \oplus p_{i-1}$
+* **Initialization Vector (IV)**: The implementation uses a 32-byte IV (consisting of two 16-byte blocks) to initialize the XOR chains, ensuring that identical plaintexts result in different ciphertexts.
+
 ---
 
-### 5. Transitioning to Standard Libraries
+### 6. Transitioning to Standard Libraries
 
 To upgrade this project to industry standards, follow these steps:
 
