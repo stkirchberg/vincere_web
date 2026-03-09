@@ -15,7 +15,7 @@
 ## 🌐 Live Demo (Tor Network)
 
 > [!IMPORTANT]
-> To access the live instance of **vincere**, you must use the **Tor Browser** or a **Brave Private Window with Tor**. 
+> To access the live instance of **vincere**, you must use the **Tor Browser** or a **Brave Private Window with Tor**. <br>
 > Standard browsers (Chrome, Firefox, etc.) will not be able to resolve this address.
 
 **Onion Address:** <a href="http://vincere3v6uwymckmwdhvjhhs2ogilqh2aejfjays74fmj4jyjufqmid.onion/" target="_blank" rel="noopener noreferrer">
