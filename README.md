@@ -3,7 +3,7 @@
 > [!CAUTION]
 > **Self-rolled Crypto**
 >
-> I am fully aware of the golden rule: *"Don't roll your own crypto."*
+> I am fully aware of the golden rule: *"Don't roll your own crypto."*<br>
 > I did it anyway for the sake of this project.
 >
 > Please do not use this in production unless you have personally audited the code for security vulnerabilities, as I cannot guarantee it is exploit-free.
@@ -15,7 +15,7 @@
 ## Live Demo (Tor Network)
 
 > [!IMPORTANT]
-> To access the live instance of **vincere**, you must use the **Tor Browser**.
+> To access the live instance of **vincere**, you must use the **Tor Browser**.<br>
 > Standard browsers (Chrome, Firefox, etc.) will not be able to resolve this address.
 
 **Onion Address:** [http://vincere3v6uwymckmwdhvjhhs2ogilqh2aejfjays74fmj4jyjufqmid.onion/](http://vincere3v6uwymckmwdhvjhhs2ogilqh2aejfjays74fmj4jyjufqmid.onion/)
