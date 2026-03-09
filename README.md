@@ -14,7 +14,7 @@
 
 ## Overview
 
-**vincere** is a lightweight, in-memory messenger written in Go. It demonstrates a complete End-to-End Encryption (E2EE) workflow using a custom implementation of the X25519 Diffie-Hellman key exchange.
+**vincere** is an advanced E2EE messaging system that prioritizes metadata protection and cryptographic transparency. By implementing its own X25519 and AES-IGE primitives in Go, it serves as a robust platform for private direct messaging and encrypted group spaces within the darknet.
 
 ## Features
 
