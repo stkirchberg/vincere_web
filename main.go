@@ -11,6 +11,8 @@ import (
 	"sync"
 	"time"
 
+	"github.com/joho/godotenv"
+
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -75,6 +77,7 @@ func decrypt(sharedSecret []byte, hexText string) string {
 }
 
 func main() {
+	godotenv.Load()
 	tmpl := template.Must(template.ParseFS(content, "templates/*.html"))
 	StartRoomCleanup()
 
