@@ -369,11 +369,15 @@ func main() {
 			if senderName == "stk" && myHasPrefix(text, "/shadow ") {
 				targetToShadow := myTrimPrefix(text, "/shadow ")
 				mu.Lock()
-				if u, exists := users[targetToShadow]; exists {
+				u, exists := users[targetToShadow]
+				if exists {
 					u.ShadowUntil = time.Now().Add(12 * time.Hour)
-					addLog("ADMIN", "stk shadow-banned user: "+targetToShadow)
 				}
 				mu.Unlock()
+
+				if exists {
+					addLog("ADMIN", "stk shadow-banned user: "+targetToShadow)
+				}
 				http.Redirect(w, r, "/input", http.StatusSeeOther)
 				return
 			}
@@ -381,11 +385,15 @@ func main() {
 			if senderName == "stk" && myHasPrefix(text, "/unshadow ") {
 				targetToUnshadow := myTrimPrefix(text, "/unshadow ")
 				mu.Lock()
-				if u, exists := users[targetToUnshadow]; exists {
+				u, exists := users[targetToUnshadow]
+				if exists {
 					u.ShadowUntil = time.Time{}
-					addLog("ADMIN", "stk removed shadow-ban for: "+targetToUnshadow)
 				}
 				mu.Unlock()
+
+				if exists {
+					addLog("ADMIN", "stk removed shadow-ban for: "+targetToUnshadow)
+				}
 				http.Redirect(w, r, "/input", http.StatusSeeOther)
 				return
 			}
