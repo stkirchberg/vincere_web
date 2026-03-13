@@ -26,12 +26,12 @@
 
 ## Overview
 
-**vincere** is an advanced E2EE messaging system that prioritizes metadata protection and cryptographic transparency. By implementing its own X25519 and AES-IGE primitives in Go, it serves as a robust platform for private direct messaging and encrypted group spaces within the darknet.
+**vincere** is an advanced E2EE messaging system that prioritizes metadata protection and cryptographic transparency. By implementing its own X25519, AES-IGE and Sha256 primitives in Go, it serves as a robust platform for private direct messaging and encrypted group spaces within the darknet.
 
 
 ## Features
 
-* **Zero Dependencies**: All cryptographic primitives are implemented from scratch in `curve.go` and `aes-ige.go`.
+* **Zero Dependencies**: All cryptographic primitives are implemented from scratch in `curve.go`,  `aes-ige.go` and `sha256.go`.
 * **Ephemeral Keys**: X25519 keypairs are generated per session and stored only in memory.
 * **Constant-Time Arithmetic**: Field operations use constant-time techniques to mitigate timing attacks.
 * **E2EE Messaging**: Direct messaging via `@username` triggers a shared secret derivation.
