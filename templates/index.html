@@ -38,7 +38,11 @@
                 <span class="separator">|</span>
                 Room: <strong>{{.RoomName}}</strong>
                 <span class="separator">|</span>
-                Online here: <span class="online-list">{{.OnlineUsers}}</span>
+                <span class="online-list">
+                    {{range $index, $user := .OnlineUsers}}
+                        {{if $index}}, {{end}}<span style="color: {{$user.Color}};">{{$user.Username}}</span>
+                    {{end}}
+                </span>
             </div>
             <a href="/logout" target="_top" class="logout-link">[EXIT SESSION]</a>
         </div>

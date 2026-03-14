@@ -46,12 +46,13 @@ var (
 	chatHistory []Message
 	serverLogs  []string
 	mu          sync.RWMutex
+	logMu       sync.Mutex
 )
 
-// addLog verwendet mu.Lock().
 func addLog(category, message string) {
-	mu.Lock()
-	defer mu.Unlock()
+	logMu.Lock()
+	defer logMu.Unlock()
+
 	timestamp := time.Now().Format("15:04:05.000")
 	entry := fmt.Sprintf("[%s] %-10s | %s", timestamp, category, message)
 	serverLogs = append(serverLogs, entry)
