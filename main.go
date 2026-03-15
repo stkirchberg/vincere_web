@@ -466,7 +466,7 @@ func main() {
 		for {
 			time.Sleep(30 * time.Second)
 			mu.Lock()
-			cutoff := time.Now().Add(-1 * time.Minute)
+			cutoff := time.Now().Add(-15 * time.Minute)
 			for name, u := range users {
 				if u.LastSeen.Before(cutoff) {
 					delete(users, name)
