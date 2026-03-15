@@ -5,16 +5,29 @@
     <meta http-equiv="refresh" content="2">
     <link rel="stylesheet" href="/static/style.css">
     <style>
-        .message-content {
-            white-space: pre-wrap;
-            word-wrap: break-word;
-            display: inline; 
-            margin-left: 5px;
-        }
         .message {
             border-left: 3px solid;
             padding-left: 10px;
             margin-bottom: 8px;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+        }
+        .time {
+            color: #666;
+            font-size: 0.8em;
+            margin-right: 5px;
+        }
+        .user {
+            font-weight: bold;
+            margin-right: 5px;
+        }
+        .message-content {
+            white-space: pre-wrap;
+            display: inline;
+        }
+        .status-tag {
+            font-weight: bold;
+            margin-right: 5px;
         }
     </style>
 </head>
@@ -22,14 +35,29 @@
     <div class="chat-box">
         {{range .Messages}}
         <div class="message" style="border-left-color: {{.Color}};">
-            <span class="time" style="color: #666; font-size: 0.8em;">[{{.Timestamp.Format "15:04"}}]</span>
+            <span class="time">[{{.Timestamp.Format "15:04"}}]</span>
             
-            {{if and .IsEncrypted (eq .Target $.Username)}}
-                <span style="color: #ff0000; font-weight: bold;">[for you] </span>
-            {{end}}
+            {{- if .IsEncrypted -}}
+                {{- if eq .Target $.Username -}}
+                    <span class="status-tag" style="color: #ff0000;">[for you] </span>
+                {{- else if eq .Sender $.Username -}}
+                    <span class="status-tag" style="color: #5555ff;">[sent] </span>
+                {{- end -}}
+            {{- end -}}
             
-            <span class="user" style="color: {{.Color}}; font-weight: bold;">{{.Sender}}:</span>
-            <span class="text message-content" style="color: {{.Color}};">{{if .IsEncrypted}}{{if eq .Target $.Username}}{{.Content}}{{else}}<span style="opacity: 0.5;">[Encrypted]</span>{{end}}{{else}}{{.Content}}{{end}}</span>
+            <span class="user" style="color: {{.Color}};">{{.Sender}}:</span>
+            
+            <span class="message-content" style="color: {{.Color}};">
+                {{- if .IsEncrypted -}}
+                    {{- if or (eq .Target $.Username) (eq .Sender $.Username) -}}
+                        {{.Content}}
+                    {{- else -}}
+                        <span style="opacity: 0.5;">[Encrypted]</span>
+                    {{- end -}}
+                {{- else -}}
+                    {{.Content}}
+                {{- end -}}
+            </span>
         </div>
         {{end}}
         <div id="bottom"></div>

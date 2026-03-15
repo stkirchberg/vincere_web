@@ -41,12 +41,13 @@ type Message struct {
 }
 
 var (
-	users       = make(map[string]*User)
-	sessions    = make(map[string]string)
-	chatHistory []Message
-	serverLogs  []string
-	mu          sync.RWMutex
-	logMu       sync.Mutex
+	users          = make(map[string]*User)
+	sessions       = make(map[string]string)
+	publicKeyStore = make(map[string][32]byte)
+	chatHistory    []Message
+	serverLogs     []string
+	mu             sync.RWMutex
+	logMu          sync.Mutex
 )
 
 func addLog(category, message string) {
@@ -215,20 +216,19 @@ func main() {
 
 			if show {
 				if m.IsEncrypted && currentUser != nil {
-					var partnerName string
-					if m.Sender == currentUser.Username {
-						partnerName = m.Target
-					} else {
+					partnerName := m.Target
+					if m.Target == currentUser.Username {
 						partnerName = m.Sender
 					}
-
 					mu.RLock()
-					partner, exists := users[partnerName]
+					partnerPubKey, exists := publicKeyStore[partnerName]
 					mu.RUnlock()
 
 					if exists {
-						shared, _ := X25519(currentUser.PrivKey, partner.PubKey)
+						shared, _ := X25519(currentUser.PrivKey, partnerPubKey)
 						m.Content = decrypt(shared[:], m.Content)
+					} else {
+						m.Content = "[Error: Partner's public key not found]"
 					}
 				}
 				filtered = append(filtered, m)
@@ -301,6 +301,7 @@ func main() {
 		rand.Read(sessionBytes)
 		sid := myHexEncode(sessionBytes)
 		sessions[sid] = name
+		publicKeyStore[name] = pub
 		mu.Unlock()
 
 		if assignedRoom != "" {
