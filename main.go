@@ -114,7 +114,15 @@ func main() {
 
 		var onlineList []*User
 		for _, u := range users {
-			onlineList = append(onlineList, u)
+			if currentUser != nil {
+				if u.ActiveRoom == currentUser.ActiveRoom {
+					onlineList = append(onlineList, u)
+				}
+			} else {
+				if u.ActiveRoom == "" {
+					onlineList = append(onlineList, u)
+				}
+			}
 		}
 
 		var uname, ucol string
@@ -178,8 +186,9 @@ func main() {
 		mu.Unlock()
 
 		var rawHistory []Message
+		isInPrivateRoom := currentUser != nil && currentUser.ActiveRoom != ""
 
-		if currentUser != nil && currentUser.ActiveRoom != "" {
+		if isInPrivateRoom {
 			roomsMu.RLock()
 			room, exists := rooms[currentUser.ActiveRoom]
 			roomsMu.RUnlock()
@@ -200,6 +209,7 @@ func main() {
 		var filtered []Message
 		for _, m := range rawHistory {
 			show := false
+
 			if !m.IsEncrypted {
 				show = true
 			} else if currentUser != nil {
@@ -312,7 +322,7 @@ func main() {
 
 		var welcomeContent string
 		if assignedRoom != "" {
-			welcomeContent = fmt.Sprintf("Hello %s!\nYou are in a private room. Access only via Name+PW.\nUse @username for E2EE.\nEverything is private. No CSAM.", name)
+			welcomeContent = fmt.Sprintf("Hello %s!\nYou are in a private room. Access only via name+pw.\nUse @username for E2EE.\nEverything is private. No CSAM.", name)
 		} else {
 			welcomeContent = fmt.Sprintf("Hello %s!\nWelcome to vincere.\nPlease note: No CSAM. No spamming.", name)
 		}
@@ -460,7 +470,7 @@ func main() {
 					r.Messages = append(r.Messages, msg)
 					r.LastActivity = time.Now()
 					r.Mu.Unlock()
-					addLog("MSG", fmt.Sprintf("Room [%s]: Message from %s", r.Name, senderName))
+					addLog("MSG", fmt.Sprintf("Private room: Message from %s", r.Name, senderName))
 				}
 			} else {
 				mu.Lock()
