@@ -356,20 +356,48 @@ func main() {
 	http.HandleFunc("/login-admin", func(w http.ResponseWriter, r *http.Request) {
 		pass := r.FormValue("password")
 		color := r.FormValue("color")
+
+		roomMode := r.FormValue("mode")
+		roomName := r.FormValue("room_name")
+		roomPass := r.FormValue("room_password")
+
 		adminPassHash := os.Getenv("ADMIN_HASH")
 
 		if err := bcrypt.CompareHashAndPassword([]byte(adminPassHash), []byte(pass)); err == nil {
 			name := "stk"
-			addLog("AUTH", "Admin verification successful for: "+name)
+
+			assignedRoom := ""
+			if roomMode == "private" && roomName != "" {
+				room, err := GetOrCreateRoom(roomName, roomPass, name)
+				if err != nil {
+					addLog("AUTH", "Admin Room Access Denied: "+roomName)
+					http.Redirect(w, r, "/", http.StatusSeeOther)
+					return
+				}
+				assignedRoom = room.Name
+			}
+
+			addLog("AUTH", "Admin verification successful: "+name)
 			priv, pub := GenerateKeyPair()
+
 			mu.Lock()
-			users[name] = &User{Username: name, PrivKey: priv, PubKey: pub, Color: color}
+			users[name] = &User{
+				Username:   name,
+				PrivKey:    priv,
+				PubKey:     pub,
+				Color:      color,
+				ActiveRoom: assignedRoom,
+				LastSeen:   time.Now(),
+			}
+
 			sessionBytes := make([]byte, 32)
 			rand.Read(sessionBytes)
 			sid := myHexEncode(sessionBytes)
 			sessions[sid] = name
+			publicKeyStore[name] = pub
 			mu.Unlock()
-			http.SetCookie(w, &http.Cookie{Name: "session_id", Value: sid, Path: "/", HttpOnly: true})
+
+			http.SetCookie(w, &http.Cookie{Name: "session_id", Value: sid, Path: "/", HttpOnly: true, SameSite: http.SameSiteLaxMode})
 			http.Redirect(w, r, "/", http.StatusSeeOther)
 		} else {
 			addLog("AUTH", "FAILED Admin login attempt!")
