@@ -74,7 +74,7 @@ func encrypt(sharedSecret []byte, text string) string {
 func decrypt(sharedSecret []byte, hexText string) string {
 	res, err := decryptFull(sharedSecret, hexText)
 	if err != nil {
-		return "[Integritätsfehler]"
+		return "[Integrity Error]"
 	}
 	return res
 }
@@ -129,6 +129,7 @@ func main() {
 		if currentUser != nil {
 			uname = currentUser.Username
 			ucol = currentUser.Color
+
 		}
 		mu.RUnlock()
 
