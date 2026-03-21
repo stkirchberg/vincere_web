@@ -7,6 +7,7 @@
         .user-span { display: inline; }
     </style>
 </head>
+
 <body>
     {{range $index, $user := .OnlineUsers}}{{if $index}}, {{end}}<span style="color: {{$user.Color}};">{{$user.Username}}</span>{{end}}
 </body>
