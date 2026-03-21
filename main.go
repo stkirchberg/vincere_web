@@ -536,6 +536,34 @@ func main() {
 		}
 	}()
 
+	http.HandleFunc("/online-status", func(w http.ResponseWriter, r *http.Request) {
+		mu.RLock()
+		var currentUser *User
+		if cookie, err := r.Cookie("session_id"); err == nil {
+			if name, ok := sessions[cookie.Value]; ok {
+				currentUser = users[name]
+			}
+		}
+
+		var onlineList []*User
+		for _, u := range users {
+			if currentUser != nil {
+				if u.ActiveRoom == currentUser.ActiveRoom {
+					onlineList = append(onlineList, u)
+				}
+			} else {
+				if u.ActiveRoom == "" {
+					onlineList = append(onlineList, u)
+				}
+			}
+		}
+		mu.RUnlock()
+
+		tmpl.ExecuteTemplate(w, "online.html", map[string]interface{}{
+			"OnlineUsers": onlineList,
+		})
+	})
+
 	http.HandleFunc("/logout", func(w http.ResponseWriter, r *http.Request) {
 		cookie, err := r.Cookie("session_id")
 		if err == nil {
