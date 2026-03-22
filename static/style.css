@@ -379,3 +379,51 @@ input[type="password"]:focus, .color-select:focus {
     box-shadow: 0 0 30px rgba(0, 255, 0, 0.2);
     text-align: center;
 }
+
+
+
+
+
+.donation-box {
+    margin-top: 25px;
+    padding: 15px;
+    border: 1px dashed #050;
+    background: #050505;
+    text-align: center;
+}
+
+.donation-header {
+    font-size: 0.8em;
+    color: #0f0;
+    letter-spacing: 2px;
+    margin-bottom: 8px;
+    font-weight: bold;
+}
+
+.donation-text {
+    font-size: 0.7em;
+    color: #0a0;
+    margin-bottom: 12px;
+}
+
+.address-container {
+    background: #000;
+    border: 1px solid #030;
+    padding: 10px;
+    margin-bottom: 5px;
+}
+
+.xmr-address {
+    display: block;
+    word-break: break-all;
+    font-size: 0.8em;
+    color: #0f0;
+    font-family: 'Courier New', monospace;
+    user-select: all;
+}
+
+.no-js-hint {
+    font-size: 0.6em;
+    color: #444;
+    text-transform: uppercase;
+}
