@@ -284,16 +284,6 @@ func main() {
 			return
 		}
 
-		mu.RLock()
-		_, active := users[name]
-		mu.RUnlock()
-
-		if active {
-			addLog("AUTH", "Login denied: Username "+name+" is already active.")
-			http.Redirect(w, r, "/?error=name_taken", http.StatusSeeOther)
-			return
-		}
-
 		assignedRoom := ""
 		if roomMode == "private" && roomName != "" {
 			room, err := GetOrCreateRoom(roomName, roomPass, name)
@@ -304,37 +294,6 @@ func main() {
 			}
 			assignedRoom = room.Name
 		}
-
-		addLog("AUTH", "Generating X25519 keypair for: "+name)
-		priv, pub := GenerateKeyPair()
-
-		mu.Lock()
-		users[name] = &User{
-			Username:   name,
-			PrivKey:    priv,
-			PubKey:     pub,
-			Color:      color,
-			ActiveRoom: assignedRoom,
-			LastSeen:   time.Now(),
-		}
-		publicKeyStore[name] = pub
-
-		sid := fmt.Sprintf("%x", make([]byte, 16))
-		if _, err := rand.Read([]byte(sid)); err != nil {
-			sid = fmt.Sprintf("%x", time.Now().UnixNano())
-		}
-		sessions[sid] = name
-		mu.Unlock()
-
-		http.SetCookie(w, &http.Cookie{
-			Name:     "session_id",
-			Value:    sid,
-			HttpOnly: true,
-			Path:     "/",
-		})
-
-		addLog("AUTH", "User login: "+name+" (Room: "+assignedRoom+")")
-		http.Redirect(w, r, "/chat", http.StatusSeeOther)
 
 		if name == "stk" {
 			tmpl.ExecuteTemplate(w, "admin_login.html", map[string]string{
