@@ -20,14 +20,14 @@ import (
 var content embed.FS
 
 type User struct {
-	Username    string
-	asswordHash string
-	PrivKey     [32]byte
-	PubKey      [32]byte
-	Color       string
-	ShadowUntil time.Time
-	ActiveRoom  string
-	LastSeen    time.Time
+	Username     string
+	PasswordHash string
+	PrivKey      [32]byte
+	PubKey       [32]byte
+	Color        string
+	ShadowUntil  time.Time
+	ActiveRoom   string
+	LastSeen     time.Time
 }
 
 type Message struct {
@@ -274,6 +274,7 @@ func main() {
 
 	http.HandleFunc("/login", func(w http.ResponseWriter, r *http.Request) {
 		name := myTrimSpace(r.FormValue("username"))
+		password := r.FormValue("user_password")
 		color := r.FormValue("color")
 
 		roomMode := r.FormValue("mode")
@@ -306,17 +307,44 @@ func main() {
 			return
 		}
 
-		addLog("AUTH", "Generating X25519 keypair for: "+name)
+		mu.Lock()
+		existingUser, exists := users[name]
+		if exists {
+			err := bcrypt.CompareHashAndPassword([]byte(existingUser.PasswordHash), []byte(password))
+			if err != nil {
+				mu.Unlock()
+				addLog("AUTH", "Login FAILED: Wrong password for "+name)
+				http.Redirect(w, r, "/", http.StatusSeeOther)
+				return
+			}
+			existingUser.LastSeen = time.Now()
+			existingUser.ActiveRoom = assignedRoom
+			existingUser.Color = color
+
+			sessionBytes := make([]byte, 32)
+			rand.Read(sessionBytes)
+			sid := myHexEncode(sessionBytes)
+			sessions[sid] = name
+			mu.Unlock()
+
+			addLog("AUTH", "Re-Login success: "+name)
+			http.SetCookie(w, &http.Cookie{Name: "session_id", Value: sid, Path: "/", HttpOnly: true, SameSite: http.SameSiteLaxMode})
+			http.Redirect(w, r, "/", http.StatusSeeOther)
+			return
+		}
+
+		hash, _ := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
+		addLog("AUTH", "Generating X25519 keypair for new user: "+name)
 		priv, pub := GenerateKeyPair()
 
-		mu.Lock()
 		users[name] = &User{
-			Username:   name,
-			PrivKey:    priv,
-			PubKey:     pub,
-			Color:      color,
-			ActiveRoom: assignedRoom,
-			LastSeen:   time.Now(),
+			Username:     name,
+			PasswordHash: string(hash),
+			PrivKey:      priv,
+			PubKey:       pub,
+			Color:        color,
+			ActiveRoom:   assignedRoom,
+			LastSeen:     time.Now(),
 		}
 
 		sessionBytes := make([]byte, 32)
@@ -546,13 +574,14 @@ func main() {
 
 	go func() {
 		for {
-			time.Sleep(30 * time.Second)
+			time.Sleep(5 * time.Minute)
 			mu.Lock()
-			cutoff := time.Now().Add(-15 * time.Minute)
+			cutoff := time.Now().Add(-12 * time.Hour)
 			for name, u := range users {
 				if u.LastSeen.Before(cutoff) {
 					delete(users, name)
-					addLog("AUTH", "Timeout: "+name+" removed.")
+					delete(publicKeyStore, name)
+					addLog("AUTH", "12h Inactivity Timeout: "+name+" removed from RAM.")
 				}
 			}
 			mu.Unlock()
@@ -590,13 +619,12 @@ func main() {
 			mu.Lock()
 			name, ok := sessions[sid]
 			if ok {
-				delete(users, name)
 				delete(sessions, sid)
 			}
 			mu.Unlock()
 
 			if ok {
-				addLog("AUTH", "User logout: "+name)
+				addLog("AUTH", "User session ended: "+name)
 			}
 		}
 
