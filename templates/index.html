@@ -46,11 +46,8 @@
         <div class="login-overlay">
             <form action="/login" method="POST" class="login-form">
                 <input type="text" name="username" placeholder="Username" required autofocus>
-
-                <input type="password" name="user_password" placeholder="Password" required>
+                <input type="password" name="user_password" placeholder="User Password" required>
                 
-                
-
                 <div class="settings">
                     <label>Name Color: 
                         <select name="color" class="color-select">
@@ -199,30 +196,30 @@
                     </label>
 
                     <input type="checkbox" name="mode" value="private" id="private-mode-check">
-                <label for="private-mode-check" class="toggle-label">
-                    Toggle Private Room Mode
-                </label>
+                    <label for="private-mode-check" class="toggle-label">
+                        Toggle Private Room Mode
+                    </label>
 
-                <div class="private-fields-container">
-                    <input type="text" name="room_name" placeholder="Privat Room Name">
-                    <input type="password" name="room_password" placeholder="Room Password">
-                    <p style="font-size: 0.7em; color: #888; margin-top: 5px;">
-                        Room will be created if it doesn't exist.
-                    </p>
-                </div>
+                    <div class="private-fields-container">
+                        <input type="text" name="room_name" placeholder="Private Room Name">
+                        <input type="password" name="room_password" placeholder="Room Password">
+                        <p style="font-size: 0.7em; color: #888; margin-top: 5px;">
+                            Room will be created if it doesn't exist.
+                        </p>
+                    </div>
 
                 </div>
                 <button type="submit" class="btn-login">INITIALIZE SESSION</button>
             </form>
         </div>
 
-            <div class="donation-box">
-                <div class="donation-header">== SUPPORT PROTOCOL: XMR ==</div>
-                <p class="donation-text">To keep this chat active, consider a donation:</p>
-                <div class="address-container">
-                    <code class="xmr-address">43GzLYoHv3ybPUNNeBDTfhYvPF7FXjoRtG8jnLHJBCbJT64B497xJwRKReaznVx3qkNJvPsk5t3kvWWFy94tNug33dfMqbY</code>
-                </div>
+        <div class="donation-box">
+            <div class="donation-header">== SUPPORT PROTOCOL: XMR ==</div>
+            <p class="donation-text">To keep this chat active, consider a donation:</p>
+            <div class="address-container">
+                <code class="xmr-address">43GzLYoHv3ybPUNNeBDTfhYvPF7FXjoRtG8jnLHJBCbJT64B497xJwRKReaznVx3qkNJvPsk5t3kvWWFy94tNug33dfMqbY</code>
             </div>
+        </div>
         {{end}}
     </div>
 </body>
