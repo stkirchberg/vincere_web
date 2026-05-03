@@ -21,6 +21,7 @@ var content embed.FS
 
 type User struct {
 	Username    string
+	asswordHash string
 	PrivKey     [32]byte
 	PubKey      [32]byte
 	Color       string
