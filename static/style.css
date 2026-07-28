@@ -526,13 +526,6 @@ details[open] .collapsible-header {
     color: #0f0;
 }
 
-.collapsible-content pre {
-    background: #000;
-    border: 1px solid #030;
-    padding: 10px;
-    overflow-x: auto;
-    color: #0f0;
-}
 
 .links-list {
     display: flex;
