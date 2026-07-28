@@ -612,6 +612,20 @@ func main() {
 		})
 	})
 
+	http.HandleFunc("/links", func(w http.ResponseWriter, r *http.Request) {
+		err := tmpl.ExecuteTemplate(w, "links.html", nil)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+		}
+	})
+
+	http.HandleFunc("/blog", func(w http.ResponseWriter, r *http.Request) {
+		err := tmpl.ExecuteTemplate(w, "blog.html", nil)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+		}
+	})
+
 	http.HandleFunc("/logout", func(w http.ResponseWriter, r *http.Request) {
 		cookie, err := r.Cookie("session_id")
 		if err == nil {
