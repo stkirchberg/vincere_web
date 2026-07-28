@@ -465,7 +465,6 @@ input[type="password"]:focus, .color-select:focus {
 
 
 
-
 .links-container {
     padding: 20px;
     max-width: 900px;
@@ -474,6 +473,12 @@ input[type="password"]:focus, .color-select:focus {
     width: 100%;
     box-sizing: border-box;
     overflow-y: auto;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+.links-container::-webkit-scrollbar {
+    display: none;
 }
 
 .collapsible-wrapper {
@@ -510,7 +515,7 @@ details[open] .collapsible-header {
 .collapsible-content {
     padding: 20px;
     font-size: 0.85em;
-    color: #0a0;
+    color: #ccc;
     line-height: 1.5;
 }
 
@@ -554,22 +559,39 @@ details[open] .collapsible-header {
     padding-right: 20px;
 }
 
+.link-header {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    margin-bottom: 6px;
+}
+
 .link-title {
     font-size: 1.1em;
     font-weight: bold;
     color: #0f0;
     text-decoration: none;
-    display: inline-block;
-    margin-bottom: 6px;
 }
 
 .link-title:hover {
     text-decoration: underline;
 }
 
+.link-url {
+    font-size: 0.8em;
+    color: #888;
+    text-decoration: none;
+    font-family: monospace;
+}
+
+.link-url:hover {
+    color: #ccc;
+    text-decoration: underline;
+}
+
 .link-desc {
     font-size: 0.8em;
-    color: #0a0;
+    color: #ccc;
     margin: 0;
     line-height: 1.4;
     max-width: 650px;
@@ -612,13 +634,3 @@ details[open] .collapsible-header {
 .nav-back:hover {
     text-decoration: underline;
 }
-
-
-
-
-
-
-
-
-
-
