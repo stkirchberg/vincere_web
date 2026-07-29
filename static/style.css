@@ -627,3 +627,187 @@ details[open] .collapsible-header {
 .nav-back:hover {
     text-decoration: underline;
 }
+
+
+
+/* CODE */
+
+.tab-input {
+    display: none;
+}
+
+.code-layout-container {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    flex-grow: 1;
+    overflow: hidden;
+    background-color: #000;
+    border-top: 1px solid #030;
+    border-bottom: 1px solid #030;
+}
+
+.code-sidebar {
+    background: #050505;
+    border-right: 1px solid #030;
+    overflow-y: auto;
+    padding: 15px;
+    font-size: 0.8em;
+}
+
+.sidebar-title {
+    color: #0f0;
+    font-weight: bold;
+    letter-spacing: 2px;
+    margin-bottom: 15px;
+    font-size: 0.9em;
+    border-bottom: 1px dashed #030;
+    padding-bottom: 5px;
+}
+
+.file-tree, .file-tree ul {
+    list-style: none;
+    padding-left: 12px;
+    margin: 0;
+}
+
+.file-tree > ul {
+    padding-left: 0;
+}
+
+.folder-item {
+    margin: 6px 0;
+}
+
+.folder-title {
+    color: #0a0;
+    font-weight: bold;
+    cursor: pointer;
+    user-select: none;
+    padding: 3px 0;
+}
+
+.folder-title:hover {
+    color: #0f0;
+}
+
+details summary::-webkit-details-marker {
+    display: none;
+}
+
+.file-label {
+    display: block;
+    color: #080;
+    padding: 3px 6px;
+    margin: 2px 0;
+    border-left: 2px solid transparent;
+    cursor: pointer;
+    word-break: break-all;
+    user-select: none;
+    transition: all 0.1s ease;
+}
+
+.file-label:hover {
+    color: #0f0;
+    background: rgba(0, 255, 0, 0.03);
+    border-left-color: #030;
+}
+
+.code-viewer-main {
+    display: flex;
+    flex-direction: column;
+    background-color: #000;
+    overflow: hidden;
+    position: relative;
+}
+
+.code-panel {
+    display: none;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+}
+
+.viewer-header {
+    background: #030;
+    color: #0f0;
+    font-size: 0.75em;
+    padding: 8px 15px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    border-bottom: 1px solid #0f0;
+}
+
+.code-content-box {
+    flex-grow: 1;
+    overflow: auto;
+    padding: 20px;
+    background: #020202;
+}
+
+.code-content-box pre {
+    margin: 0;
+    font-family: 'Courier New', monospace;
+    font-size: 0.85em;
+    color: #0f0;
+    line-height: 1.4;
+}
+
+#file-readme:checked ~ .code-layout-container .panel-readme,
+#file-aes-ige:checked ~ .code-layout-container .panel-aes-ige,
+#file-binary-util:checked ~ .code-layout-container .panel-binary-util,
+#file-curve:checked ~ .code-layout-container .panel-curve,
+#file-error-util:checked ~ .code-layout-container .panel-error-util,
+#file-go-mod:checked ~ .code-layout-container .panel-go-mod,
+#file-go-sum:checked ~ .code-layout-container .panel-go-sum,
+#file-hex-util:checked ~ .code-layout-container .panel-hex-util,
+#file-main:checked ~ .code-layout-container .panel-main,
+#file-rooms:checked ~ .code-layout-container .panel-rooms,
+#file-sha256:checked ~ .code-layout-container .panel-sha256,
+#file-string-util:checked ~ .code-layout-container .panel-string-util,
+#file-subtle-util:checked ~ .code-layout-container .panel-subtle-util,
+#file-style-css:checked ~ .code-layout-container .panel-style-css,
+#file-tpl-admin-login:checked ~ .code-layout-container .panel-tpl-admin-login,
+#file-tpl-blog:checked ~ .code-layout-container .panel-tpl-blog,
+#file-tpl-code:checked ~ .code-layout-container .panel-tpl-code,
+#file-tpl-index:checked ~ .code-layout-container .panel-tpl-index,
+#file-tpl-input:checked ~ .code-layout-container .panel-tpl-input,
+#file-tpl-links:checked ~ .code-layout-container .panel-tpl-links,
+#file-tpl-messages:checked ~ .code-layout-container .panel-tpl-messages,
+#file-tpl-online:checked ~ .code-layout-container .panel-tpl-online {
+    display: flex;
+}
+
+#file-readme:checked ~ .code-layout-container .label-readme,
+#file-aes-ige:checked ~ .code-layout-container .label-aes-ige,
+#file-binary-util:checked ~ .code-layout-container .label-binary-util,
+#file-curve:checked ~ .code-layout-container .label-curve,
+#file-error-util:checked ~ .code-layout-container .label-error-util,
+#file-go-mod:checked ~ .code-layout-container .label-go-mod,
+#file-go-sum:checked ~ .code-layout-container .label-go-sum,
+#file-hex-util:checked ~ .code-layout-container .label-hex-util,
+#file-main:checked ~ .code-layout-container .label-main,
+#file-rooms:checked ~ .code-layout-container .label-rooms,
+#file-sha256:checked ~ .code-layout-container .label-sha256,
+#file-string-util:checked ~ .code-layout-container .label-string-util,
+#file-subtle-util:checked ~ .code-layout-container .label-subtle-util,
+#file-style-css:checked ~ .code-layout-container .label-style-css,
+#file-tpl-admin-login:checked ~ .code-layout-container .label-tpl-admin-login,
+#file-tpl-blog:checked ~ .code-layout-container .label-tpl-blog,
+#file-tpl-code:checked ~ .code-layout-container .label-tpl-code,
+#file-tpl-index:checked ~ .code-layout-container .label-tpl-index,
+#file-tpl-input:checked ~ .code-layout-container .label-tpl-input,
+#file-tpl-links:checked ~ .code-layout-container .label-tpl-links,
+#file-tpl-messages:checked ~ .code-layout-container .label-tpl-messages,
+#file-tpl-online:checked ~ .code-layout-container .label-tpl-online {
+    color: #0f0;
+    background: rgba(0, 255, 0, 0.1);
+    border-left-color: #0f0;  
+    font-weight: bold;
+}
+
+.kw { color: #00ffff; font-weight: bold; }
+.str { color: #ffff00; }
+.cm { color: #008800; font-style: italic; }
+.fn { color: #00ffaa; }
+.num { color: #ffaa00; }
+.tag { color: #ff00ff; }

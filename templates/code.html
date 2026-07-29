@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/static/style.css">
+    <title>vincere // source code</title>
+</head>
+<body>
+    <div class="full-screen-wrapper">
+
+        <input type="radio" name="code-file" id="file-readme" class="tab-input" checked>
+        <input type="radio" name="code-file" id="file-aes-ige" class="tab-input">
+        <input type="radio" name="code-file" id="file-binary-util" class="tab-input">
+        <input type="radio" name="code-file" id="file-curve" class="tab-input">
+        <input type="radio" name="code-file" id="file-error-util" class="tab-input">
+        <input type="radio" name="code-file" id="file-go-mod" class="tab-input">
+        <input type="radio" name="code-file" id="file-go-sum" class="tab-input">
+        <input type="radio" name="code-file" id="file-hex-util" class="tab-input">
+        <input type="radio" name="code-file" id="file-main" class="tab-input">
+        <input type="radio" name="code-file" id="file-rooms" class="tab-input">
+        <input type="radio" name="code-file" id="file-sha256" class="tab-input">
+        <input type="radio" name="code-file" id="file-string-util" class="tab-input">
+        <input type="radio" name="code-file" id="file-subtle-util" class="tab-input">
+        <input type="radio" name="code-file" id="file-style-css" class="tab-input">
+        <input type="radio" name="code-file" id="file-tpl-admin-login" class="tab-input">
+        <input type="radio" name="code-file" id="file-tpl-blog" class="tab-input">
+        <input type="radio" name="code-file" id="file-tpl-code" class="tab-input">
+        <input type="radio" name="code-file" id="file-tpl-index" class="tab-input">
+        <input type="radio" name="code-file" id="file-tpl-input" class="tab-input">
+        <input type="radio" name="code-file" id="file-tpl-links" class="tab-input">
+        <input type="radio" name="code-file" id="file-tpl-messages" class="tab-input">
+        <input type="radio" name="code-file" id="file-tpl-online" class="tab-input">
+
+        <header>
+            <div class="logo-container">
+                <img src="/static/img/logo.png" alt="Logo" class="header-logo">
+                <h1>vincere // code</h1>
+            </div>
+        </header>
+
+        <div class="code-layout-container">
+            <aside class="code-sidebar">
+                <div class="sidebar-title">== REPOSITORY ==</div>
+                <ul class="file-tree">
+
+                    <li class="folder-item">
+                        <details open>
+                            <summary class="folder-title">static/</summary>
+                            <ul>
+                                <li><label for="file-style-css" class="file-label label-style-css">style.css</label></li>
+                            </ul>
+                        </details>
+                    </li>
+
+                    <li class="folder-item">
+                        <details open>
+                            <summary class="folder-title">templates/</summary>
+                            <ul>
+                                <li><label for="file-tpl-admin-login" class="file-label label-tpl-admin-login">admin_login.html</label></li>
+                                <li><label for="file-tpl-blog" class="file-label label-tpl-blog">blog.html</label></li>
+                                <li><label for="file-tpl-code" class="file-label label-tpl-code">code.html</label></li>
+                                <li><label for="file-tpl-index" class="file-label label-tpl-index">index.html</label></li>
+                                <li><label for="file-tpl-input" class="file-label label-tpl-input">input.html</label></li>
+                                <li><label for="file-tpl-links" class="file-label label-tpl-links">links.html</label></li>
+                                <li><label for="file-tpl-messages" class="file-label label-tpl-messages">messages.html</label></li>
+                                <li><label for="file-tpl-online" class="file-label label-tpl-online">online.html</label></li>
+                            </ul>
+                        </details>
+                    </li>
+
+                    <li><label for="file-readme" class="file-label label-readme">README.md</label></li>
+                    <li><label for="file-aes-ige" class="file-label label-aes-ige">aes-ige.go</label></li>
+                    <li><label for="file-binary-util" class="file-label label-binary-util">binary-util.go</label></li>
+                    <li><label for="file-curve" class="file-label label-curve">curve.go</label></li>
+                    <li><label for="file-error-util" class="file-label label-error-util">error-util.go</label></li>
+                    <li><label for="file-go-mod" class="file-label label-go-mod">go.mod</label></li>
+                    <li><label for="file-go-sum" class="file-label label-go-sum">go.sum</label></li>
+                    <li><label for="file-hex-util" class="file-label label-hex-util">hex-util.go</label></li>
+                    <li><label for="file-main" class="file-label label-main">main.go</label></li>
+                    <li><label for="file-rooms" class="file-label label-rooms">rooms.go</label></li>
+                    <li><label for="file-sha256" class="file-label label-sha256">sha256.go</label></li>
+                    <li><label for="file-string-util" class="file-label label-string-util">string-util.go</label></li>
+                    <li><label for="file-subtle-util" class="file-label label-subtle-util">subtle-util.go</label></li>
+                </ul>
+            </aside>
+
+            <main class="code-viewer-main">
+
+                <div class="code-panel panel-readme">
+                    <div class="viewer-header">Viewing: README.md</div>
+                    <div class="code-content-box">
+                        <pre><code># Vincere Project
+Willkommen im Repository.
+
+Klicke links in der Ordnerstruktur auf eine Datei, um deren Quellcode anzuzeigen.
+                        </code></pre>
+                    </div>
+                </div>
+
+                <div class="code-panel panel-aes-ige">
+                    <div class="viewer-header">Viewing: aes-ige.go</div>
+                    <div class="code-content-box">
+                        <pre><code><span class="kw">package</span> main
+
+<span class="cm">// Hier den Code von aes-ige.go einfügen</span></code></pre>
+                    </div>
+                </div>
+
+                <div class="code-panel panel-binary-util">
+                    <div class="viewer-header">Viewing: binary-util.go</div>
+                    <div class="code-content-box">
+                        <pre><code><span class="kw">package</span> main
+
+<span class="cm">// Hier den Code von binary-util.go einfügen</span></code></pre>
+                    </div>
+                </div>
+
+                <div class="code-panel panel-curve">
+                    <div class="viewer-header">Viewing: curve.go</div>
+                    <div class="code-content-box">
+                        <pre><code><span class="kw">package</span> main
+
+<span class="cm">// Hier den Code von curve.go einfügen</span></code></pre>
+                    </div>
+                </div>
+
+                <div class="code-panel panel-error-util">
+                    <div class="viewer-header">Viewing: error-util.go</div>
+                    <div class="code-content-box">
+                        <pre><code><span class="kw">package</span> main
+
+<span class="cm">// Hier den Code von error-util.go einfügen</span></code></pre>
+                    </div>
+                </div>
+
+                <div class="code-panel panel-go-mod">
+                    <div class="viewer-header">Viewing: go.mod</div>
+                    <div class="code-content-box">
+                        <pre><code>module vincere
+
+go 1.21</code></pre>
+                    </div>
+                </div>
+
+                <div class="code-panel panel-go-sum">
+                    <div class="viewer-header">Viewing: go.sum</div>
+                    <div class="code-content-box">
+                        <pre><code><span class="cm">// Checksums</span></code></pre>
+                    </div>
+                </div>
+
+                <div class="code-panel panel-hex-util">
+                    <div class="viewer-header">Viewing: hex-util.go</div>
+                    <div class="code-content-box">
+                        <pre><code><span class="kw">package</span> main
+
+<span class="cm">// Hier den Code von hex-util.go einfügen</span></code></pre>
+                    </div>
+                </div>
+
+                <div class="code-panel panel-main">
+                    <div class="viewer-header">Viewing: main.go</div>
+                    <div class="code-content-box">
+                        <pre><code><span class="kw">package</span> main
+
+<span class="kw">import</span> (
+    <span class="str">"fmt"</span>
+    <span class="str">"net/http"</span>
+)
+
+<span class="cm">// Entry Point</span>
+<span class="kw">func</span> <span class="fn">main</span>() {
+    fmt.<span class="fn">Println</span>(<span class="str">"Server gestartet..."</span>)
+}</code></pre>
+                    </div>
+                </div>
+
+                <div class="code-panel panel-rooms">
+                    <div class="viewer-header">Viewing: rooms.go</div>
+                    <div class="code-content-box">
+                        <pre><code><span class="kw">package</span> main
+
+<span class="cm">// Hier den Code von rooms.go einfügen</span></code></pre>
+                    </div>
+                </div>
+
+                <div class="code-panel panel-sha256">
+                    <div class="viewer-header">Viewing: sha256.go</div>
+                    <div class="code-content-box">
+                        <pre><code><span class="kw">package</span> main
+
+<span class="cm">// Hier den Code von sha256.go einfügen</span></code></pre>
+                    </div>
+                </div>
+
+                <div class="code-panel panel-string-util">
+                    <div class="viewer-header">Viewing: string-util.go</div>
+                    <div class="code-content-box">
+                        <pre><code><span class="kw">package</span> main
+
+<span class="cm">// Hier den Code von string-util.go einfügen</span></code></pre>
+                    </div>
+                </div>
+
+                <div class="code-panel panel-subtle-util">
+                    <div class="viewer-header">Viewing: subtle-util.go</div>
+                    <div class="code-content-box">
+                        <pre><code><span class="kw">package</span> main
+
+<span class="cm">// Hier den Code von subtle-util.go einfügen</span></code></pre>
+                    </div>
+                </div>
+
+                <div class="code-panel panel-style-css">
+                    <div class="viewer-header">Viewing: static/style.css</div>
+                    <div class="code-content-box">
+                        <pre><code><span class="cm">/* static/style.css Code hier kopieren */</span></code></pre>
+                    </div>
+                </div>
+
+                <div class="code-panel panel-tpl-admin-login">
+                    <div class="viewer-header">Viewing: templates/admin_login.html</div>
+                    <div class="code-content-box">
+                        <pre><code><span class="tag">&lt;!DOCTYPE html&gt;</span>
+<span class="cm">&lt;!-- admin_login.html Code --&gt;</span></code></pre>
+                    </div>
+                </div>
+
+                <div class="code-panel panel-tpl-blog">
+                    <div class="viewer-header">Viewing: templates/blog.html</div>
+                    <div class="code-content-box">
+                        <pre><code><span class="tag">&lt;!DOCTYPE html&gt;</span>
+<span class="cm">&lt;!-- blog.html Code --&gt;</span></code></pre>
+                    </div>
+                </div>
+
+                <div class="code-panel panel-tpl-code">
+                    <div class="viewer-header">Viewing: templates/code.html</div>
+                    <div class="code-content-box">
+                        <pre><code><span class="tag">&lt;!DOCTYPE html&gt;</span>
+<span class="cm">&lt;!-- code.html Code --&gt;</span></code></pre>
+                    </div>
+                </div>
+
+                <div class="code-panel panel-tpl-index">
+                    <div class="viewer-header">Viewing: templates/index.html</div>
+                    <div class="code-content-box">
+                        <pre><code><span class="tag">&lt;!DOCTYPE html&gt;</span>
+<span class="cm">&lt;!-- index.html Code --&gt;</span></code></pre>
+                    </div>
+                </div>
+
+                <div class="code-panel panel-tpl-input">
+                    <div class="viewer-header">Viewing: templates/input.html</div>
+                    <div class="code-content-box">
+                        <pre><code><span class="tag">&lt;!DOCTYPE html&gt;</span>
+<span class="cm">&lt;!-- input.html Code --&gt;</span></code></pre>
+                    </div>
+                </div>
+
+                <div class="code-panel panel-tpl-links">
+                    <div class="viewer-header">Viewing: templates/links.html</div>
+                    <div class="code-content-box">
+                        <pre><code><span class="tag">&lt;!DOCTYPE html&gt;</span>
+<span class="cm">&lt;!-- links.html Code --&gt;</span></code></pre>
+                    </div>
+                </div>
+
+                <div class="code-panel panel-tpl-messages">
+                    <div class="viewer-header">Viewing: templates/messages.html</div>
+                    <div class="code-content-box">
+                        <pre><code><span class="tag">&lt;!DOCTYPE html&gt;</span>
+<span class="cm">&lt;!-- messages.html Code --&gt;</span></code></pre>
+                    </div>
+                </div>
+
+                <div class="code-panel panel-tpl-online">
+                    <div class="viewer-header">Viewing: templates/online.html</div>
+                    <div class="code-content-box">
+                        <pre><code><span class="tag">&lt;!DOCTYPE html&gt;</span>
+<span class="cm">&lt;!-- online.html Code --&gt;</span></code></pre>
+                    </div>
+                </div>
+
+            </main>
+        </div>
+
+        <div class="footer">
+            <div class="footer-info">
+                <a href="/" class="nav-back" style="margin:0;">[ &lt;- BACK TO CHAT ]</a>
+            </div>
+            <div class="no-js-hint">NO-JS REPOSITORY VIEWER</div>
+        </div>
+    </div>
+</body>
+</html>
