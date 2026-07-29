@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="/static/style.css">
-    <title>vincere // source code</title>
+    <title>vincere/source-code</title>
 </head>
 <body>
     <div class="full-screen-wrapper">
@@ -34,7 +34,7 @@
         <header>
             <div class="logo-container">
                 <img src="/static/img/logo.png" alt="Logo" class="header-logo">
-                <h1>vincere // code</h1>
+                <h1>vincere</h1>
             </div>
         </header>
 
@@ -44,7 +44,7 @@
                 <ul class="file-tree">
                     <li class="folder-item">
                         <details open>
-                            <summary class="folder-title">📁 static/</summary>
+                            <summary class="folder-title">static/</summary>
                             <ul>
                                 <li><label for="file-style-css" class="file-label label-style-css">style.css</label></li>
                             </ul>
@@ -53,7 +53,7 @@
 
                     <li class="folder-item">
                         <details open>
-                            <summary class="folder-title">📁 templates/</summary>
+                            <summary class="folder-title">templates/</summary>
                             <ul>
                                 <li><label for="file-tpl-admin-login" class="file-label label-tpl-admin-login">admin_login.html</label></li>
                                 <li><label for="file-tpl-blog" class="file-label label-tpl-blog">blog.html</label></li>
@@ -86,14 +86,153 @@
             <main class="code-viewer-main">
 
                 <div class="code-panel panel-readme">
-                    <div class="viewer-header">Viewing: README.md</div>
-                    <div class="code-content-box">
-                        <pre><code># Vincere Project
-Willkommen im Repository.
+    <div class="viewer-header">Viewing: README.md</div>
+    <div class="code-content-box">
+        <div class="markdown-body">
+            <h1>vincere</h1>
 
-Klicke links in der Ordnerstruktur auf eine Datei, um deren Quellcode anzuzeigen.</code></pre>
-                    </div>
-                </div>
+            <div class="callout callout-caution">
+                <div class="callout-title">⚠️ CAUTION: Self-rolled Crypto</div>
+                <p>I am fully aware of the golden rule: <em>"Don't roll your own crypto."</em><br>
+                I did it anyway for the sake of this project.</p>
+                <p>Please do not use this in production unless you have personally audited the code for security vulnerabilities, as I cannot guarantee it is exploit-free.</p>
+                <p>For instructions on how to swap these implementations for standard, battle-tested libraries, please refer to the section <a href="#sec-transitioning">Transitioning to Standard Libraries</a> below.</p>
+            </div>
+
+            <hr>
+
+            <h2>Live Demo (Tor Network)</h2>
+
+            <div class="callout callout-important">
+                <div class="callout-title">ℹ️ IMPORTANT</div>
+                <p>To access the live instance of <strong>vincere</strong>, you must use the <strong>Tor Browser</strong> or a <strong>Brave Private Window with Tor</strong>.<br>
+                Standard browsers (Chrome, Firefox, etc.) will not be able to resolve this address.</p>
+            </div>
+
+            <p><strong>Onion Address:</strong> 
+                <a href="http://vincere3v6uwymckmwdhvjhhs2ogilqh2aejfjays74fmj4jyjufqmid.onion/" target="_blank" rel="noopener noreferrer" class="onion-link">
+                    vincere3v6uwymckmwdhvjhhs2ogilqh2aejfjays74fmj4jyjufqmid.onion
+                </a>
+            </p>
+
+            <hr>
+
+            <h2>Overview</h2>
+            <p><strong>vincere</strong> is an advanced E2EE messaging system that prioritizes metadata protection and cryptographic transparency. By implementing its own X25519, AES-IGE and Sha256 primitives in Go, it serves as a robust platform for private direct messaging and encrypted group spaces within the darknet.</p>
+
+            <h2>Features</h2>
+            <ul>
+                <li><strong>Zero Dependencies</strong>: All cryptographic primitives are implemented from scratch in <code>curve.go</code>, <code>aes-ige.go</code> and <code>sha256.go</code>.</li>
+                <li><strong>Ephemeral Keys</strong>: X25519 keypairs are generated per session and stored only in memory.</li>
+                <li><strong>Constant-Time Arithmetic</strong>: Field operations use constant-time techniques to mitigate timing attacks.</li>
+                <li><strong>E2EE Messaging</strong>: Direct messaging via <code>@username</code> triggers a shared secret derivation.</li>
+                <li><strong>Real-time Logs</strong>: A built-in server log frame to monitor cryptographic handshakes and system events.</li>
+            </ul>
+
+            <hr>
+
+            <h2>Architecture &amp; Key Exchange</h2>
+            <p>The following diagram illustrates how two users establish a shared secret using the internal X25519 implementation:</p>
+
+            <pre><code>    USER A (Alice)                         USER B (Bob)
+    --------------                         ------------
+    1. Generate PrivA                      1. Generate PrivB
+    2. Compute PubA = X25519(PrivA, 9)     2. Compute PubB = X25519(PrivB, 9)
+             |                                      |
+             |---------- [ Send PubA ]-------------&gt;|
+             |&lt;--------- [ Send PubB ]--------------|
+             |                                      |
+    3. Compute SharedSecret:               3. Compute SharedSecret:
+       SS = X25519(PrivA, PubB)               SS = X25519(PrivB, PubA)
+             |                                      |
+             +------------------ EQUAL -------------+
+                                |
+                    [ Encrypted Communication ]</code></pre>
+
+            <hr>
+
+            <h2>Technical Deep Dive: Vincere Cryptography</h2>
+            <p>This document provides a detailed look at the internal cryptographic implementation of the <code>vincere</code> project, specifically focusing on the manual implementation of Curve25519 in <code>curve.go</code>.</p>
+
+            <h3>1. Field Arithmetic &amp; Representation</h3>
+            <p>The implementation uses a custom field element type <code>fe</code> representing elements of the prime field 2<sup>255</sup> - 19.</p>
+            <ul>
+                <li><strong>Radix-51 Representation</strong>: The 255-bit values are stored across 5 <code>uint64</code> limbs.</li>
+                <li><strong>Structure</strong>: Each limb holds 51 bits, allowing for efficient multiplication and carries on 64-bit architectures before overflow occurs.</li>
+                <li><strong>Modular Reduction</strong>: The <code>mul</code> function handles the prime reduction by utilizing the property 2<sup>255</sup> &equiv; 19 (mod p), specifically using the constant <code>38</code> for the reduction of higher-order limbs.</li>
+            </ul>
+
+            <h3>2. X25519 Montgomery Ladder</h3>
+            <p>The core of the key exchange is the Montgomery Ladder, which performs scalar multiplication <em>Q = sP</em> while being naturally resistant to timing attacks.</p>
+            <ul>
+                <li><strong>Constant-Time Swaps (cswap)</strong>: To prevent branch-based timing leaks, the implementation uses bitwise masks to swap coordinates based on the scalar bit.</li>
+                <li><strong>Implementation</strong>: The <code>cswap</code> function ensures the exact same instructions are executed regardless of whether the bit is 0 or 1.</li>
+                <li><strong>Bit Clamping</strong>: The scalar is "clamped" in <code>X25519</code> to clear the low 3 bits and set the high bit to ensure a fixed bit-length and avoid small-subgroup attacks.</li>
+            </ul>
+
+            <h3>3. Cryptographic Workflow in main.go</h3>
+            <p>The messaging layer utilizes the shared secret generated by the curve arithmetic to enable private communication.</p>
+            <ul>
+                <li><strong>Key Generation</strong>: <code>GenerateKeyPair()</code> creates a 32-byte private key and computes the public key using the base point <em>x = 9</em>.</li>
+                <li><strong>Shared Secret</strong>: Derived using <code>X25519(sender.PrivKey, target.PubKey)</code>.</li>
+                <li><strong>Encryption</strong>: The shared secret is used to encrypt the message, logged as "IGE E2EE".</li>
+                <li><strong>Memory Security</strong>: Private keys are stored in-memory only and the <code>X25519</code> function uses a <code>defer</code> block to overwrite the temporary scalar with zeros after computation.</li>
+            </ul>
+
+            <h3>4. Current Limitations &amp; Security Notes</h3>
+            <p>As this is a "self-rolled" implementation, it serves as a learning tool rather than a hardened security product:</p>
+            <ul>
+                <li><strong>Incomplete Modular Reduction</strong>: The <code>add</code> and <code>sub</code> functions are simplified and would require more rigorous handling for production use.</li>
+                <li><strong>No Formal Verification</strong>: Unlike standard libraries, this code has not been formally verified or audited for mathematical errors.</li>
+                <li><strong>In-Memory Storage</strong>: Keys are stored in a Go map, making them potentially recoverable from a memory dump if the server is compromised.</li>
+            </ul>
+
+            <h3>5. Hashing &amp; Symmetric Encryption (SHA-256 &amp; AES-IGE)</h3>
+            <p>In addition to the curve arithmetic, <code>vincere</code> implements the hashing and symmetric encryption layers from scratch to provide a transparent cryptographic pipeline.</p>
+
+            <h4>SHA-256 &amp; HMAC</h4>
+            <p>The integrity of messages and the derivation of signatures are handled by a custom SHA-256 implementation following the Merkle-Damgård construction.</p>
+            <ul>
+                <li><strong>Block Compression</strong>: The implementation in <code>sha256.go</code> manually handles the message padding, the 64-round compression function, and the specific constant <em>K</em> values.</li>
+                <li><strong>HMAC Authentication</strong>: To verify message authenticity, <code>NewHMAC</code> is used. It applies the nested hashing construction H(K &oplus; opad || H(K &oplus; ipad || text)) to ensure that messages cannot be tampered with.</li>
+                <li><strong>Constant-Time Verification</strong>: The <code>CheckMAC</code> function utilizes <code>myConstantTimeCompare</code> to compare the expected MAC with the received signature, mitigating timing attacks on the authentication layer.</li>
+            </ul>
+
+            <h4>AES-IGE (Infinite Garble Extension)</h4>
+            <p>For symmetric encryption, <code>vincere</code> utilizes the AES block cipher in IGE mode. This mode is notable for its error-propagation properties and its historical use in protocols like MTProto.</p>
+            <ul>
+                <li><strong>AES Core</strong>: The <code>aes-ige.go</code> file contains a manual implementation of the AES block cipher, including the S-Box substitution (<code>subBytes</code>), row shifting (<code>shiftRows</code>), and Galois Field multiplication (<code>gfMul</code>) for the <code>mixColumns</code> step.</li>
+                <li><strong>IGE Mode Logic</strong>: Unlike standard CBC, IGE mode XORs the previous ciphertext block with the current plaintext, and the previous plaintext block with the current ciphertext:<br>
+                <code>c<sub>i</sub> = f<sub>K</sub>(p<sub>i</sub> &oplus; c<sub>i-1</sub>) &oplus; p<sub>i-1</sub></code></li>
+                <li><strong>Initialization Vector (IV)</strong>: The implementation uses a 32-byte IV (consisting of two 16-byte blocks) to initialize the XOR chains, ensuring that identical plaintexts result in different ciphertexts.</li>
+            </ul>
+
+            <h3>6. Network Infrastructure: Tor &amp; Anonymity</h3>
+            <p>To further protect user metadata, <strong>vincere</strong> is designed to operate as a Tor Hidden Service (<code>.onion</code>).</p>
+            <ul>
+                <li><strong>Metadata Protection</strong>: By routing traffic through the Tor network, the server never learns the real IP addresses of the clients, and the clients do not rely on centralized Certificate Authorities (CAs).</li>
+                <li><strong>End-to-End Integrity</strong>: The <code>.onion</code> address itself is a hash of the service's public key, providing a self-authenticating layer that complements the internal E2EE.</li>
+            </ul>
+
+            <hr>
+
+            <h3 id="sec-transitioning">Transitioning to Standard Libraries</h3>
+            <p>To upgrade this project to industry standards and ensure production-grade security, follow these steps:</p>
+            <ol>
+                <li><strong>Replace Curve Arithmetic</strong>: Use the official <code>golang.org/x/crypto/curve25519</code> package for X25519 shared secret derivation.</li>
+                <li><strong>Use Authenticated Encryption (AEAD)</strong>: Replace the manual AES-IGE implementation with <code>crypto/cipher</code> and <code>crypto/aes</code>. Specifically, use <code>cipher.NewGCM</code> to provide both confidentiality and authenticity in one step.</li>
+                <li><strong>Standard Hashing &amp; HMAC</strong>: Replace the manual SHA-256 implementation with the standard <code>crypto/sha256</code> package and use <code>crypto/hmac</code> for message authentication.</li>
+                <li><strong>Secure Comparison</strong>: While the custom constant-time compare is a good exercise, use <code>crypto/subtle.ConstantTimeCompare</code> for battle-tested resistance against timing attacks.</li>
+                <li><strong>Memory Management</strong>: For sensitive data, consider using libraries like <code>github.com/awnumar/memguard</code> to protect keys from being swapped to disk or appearing in core dumps.</li>
+            </ol>
+
+            <hr>
+
+            <h3>More questions?</h3>
+            <p>Look at the code. Dumbass.</p>
+        </div>
+    </div>
+</div>
 
                 <div class="code-panel panel-aes-ige">
                     <div class="viewer-header">Viewing: aes-ige.go</div>
@@ -295,9 +434,9 @@ go 1.21</code></pre>
 
         <div class="footer">
             <div class="footer-info">
-                <a href="/" class="nav-back" style="margin:0;">[ &lt;- BACK TO CHAT ]</a>
+                <a href="/" class="nav-back" style="margin:0;">&lt; BACK TO LOGIN</a>
             </div>
-            <div class="no-js-hint">NO-JS REPOSITORY VIEWER</div>
+            <div class="no-js-hint">DEVELOPED BY STK</div>
         </div>
     </div>
 </body>
