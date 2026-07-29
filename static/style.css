@@ -631,7 +631,6 @@ details[open] .collapsible-header {
 
 
 /* CODE */
-
 .tab-input {
     display: none;
 }
@@ -679,7 +678,7 @@ details[open] .collapsible-header {
 }
 
 .folder-title {
-    color: #0a0;
+    color: #fff;
     font-weight: bold;
     cursor: pointer;
     user-select: none;
@@ -696,7 +695,7 @@ details summary::-webkit-details-marker {
 
 .file-label {
     display: block;
-    color: #080;
+    color: #fff;
     padding: 3px 6px;
     margin: 2px 0;
     border-left: 2px solid transparent;
@@ -801,13 +800,13 @@ details summary::-webkit-details-marker {
 #file-tpl-online:checked ~ .code-layout-container .label-tpl-online {
     color: #0f0;
     background: rgba(0, 255, 0, 0.1);
-    border-left-color: #0f0;  
+    border-left-color: #0f0;
     font-weight: bold;
 }
 
 .kw { color: #00ffff; font-weight: bold; }
 .str { color: #ffff00; }
-.cm { color: #008800; font-style: italic; }
+.cm { color: #888888; font-style: italic; }
 .fn { color: #00ffaa; }
 .num { color: #ffaa00; }
 .tag { color: #ff00ff; }
