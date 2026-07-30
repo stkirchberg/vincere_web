@@ -428,3 +428,33 @@ input[type="password"]:focus, .color-select:focus {
     text-transform: uppercase;
 }
 
+
+
+
+
+
+
+.nav-links-container {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.nav-btn {
+    border: 1px solid #030;
+    background: #050505;
+    color: #0f0;
+    padding: 10px 20px;
+    text-decoration: none;
+    font-family: monospace;
+    font-weight: bold;
+    text-transform: uppercase;
+    transition: all 0.2s ease;
+}
+
+.nav-btn:hover {
+    background: #0f0;
+    color: #000;
+}
+
