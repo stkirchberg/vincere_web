@@ -51,18 +51,182 @@ h1 {
     font-size: 1.6em;
     letter-spacing: 5px;
     font-weight: bolder;
+    flex-grow: 1;
+    text-align: center;
     color: #0f0;
 }
 
-h1 {
-    margin: 0;
-    padding: 0;
-    font-size: 1.6em;
-    letter-spacing: 5px;
-    font-weight: bolder;
+.blog-container {
+    padding: 20px;
+    max-width: 900px;
+    margin: 0 auto;
     flex-grow: 1;
+    width: 100%;
+    box-sizing: border-box;
+    overflow-y: auto;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+.blog-container::-webkit-scrollbar {
+    display: none;
+}
+
+/* About / Info Section */
+.collapsible-wrapper {
+    border: 1px solid #030;
+    background: #050505;
+    margin-bottom: 25px;
+    display: block;
+}
+
+.collapsible-header {
+    background: #030;
+    color: #0f0;
+    padding: 12px 15px;
+    font-size: 0.9em;
+    cursor: pointer;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    user-select: none;
+    list-style: none;
+}
+
+.collapsible-header::-webkit-details-marker {
+    display: none;
+}
+
+.collapsible-header:hover {
+    background: #040;
+}
+
+details[open] .collapsible-header {
+    border-bottom: 1px solid #030;
+}
+
+.collapsible-content {
+    padding: 20px;
+    font-size: 0.85em;
+    color: #ccc;
+    line-height: 1.5;
+}
+
+/* Blog List & Cards */
+.blog-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.blog-card {
+    border: 1px solid #030;
+    background: #050505;
+    display: block;
+    transition: border-color 0.2s ease;
+}
+
+.blog-card:hover {
+    border-color: #0f0;
+}
+
+.blog-header {
+    padding: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    user-select: none;
+    list-style: none;
+}
+
+.blog-header::-webkit-details-marker {
+    display: none;
+}
+
+.blog-title-area {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    flex-grow: 1;
+    padding-right: 20px;
+}
+
+.blog-date {
+    font-size: 0.8em;
+    color: #888;
+    font-family: monospace;
+    padding-right: 5px;
+}
+
+.blog-title {
+    font-size: 1.1em;
+    font-weight: bold;
+    color: #0f0;
+}
+
+.blog-card[open] .blog-header {
+    border-bottom: 1px solid #030;
+    background: #030;
+}
+
+.blog-content {
+    padding: 20px;
+    font-size: 0.85em;
+    color: #ccc;
+    line-height: 1.6;
+}
+
+.blog-content p {
+    margin-top: 0;
+    margin-bottom: 15px;
+}
+
+.blog-content p:last-child {
+    margin-bottom: 0;
+}
+
+.blog-content ul {
+    margin: 10px 0 15px 20px;
+    padding: 0;
+}
+
+.blog-content li {
+    margin-bottom: 6px;
+}
+
+.blog-meta {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    min-width: 120px;
+}
+
+/* Category Tags */
+.tag {
+    font-size: 0.7em;
+    padding: 3px 8px;
+    border: 1px solid currentColor;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: bold;
     text-align: center;
 }
+
+.tag-news { 
+    color: #00ffff; 
+    background: rgba(0, 255, 255, 0.05); 
+}
+
+.tag-update { 
+    color: #ffff00; 
+    background: rgba(255, 255, 0, 0.05); 
+}
+
+.tag-personal { 
+    color: #ff8800; 
+    background: rgba(255, 0, 255, 0.05); 
+}
+
 
 
 .footer {
@@ -72,15 +236,8 @@ h1 {
     background: #050505;
     border-top: 1px solid #030;
     padding: 10px 20px;
-    font-size: 0.9em;
-    color: grey;
     font-size: 0.8em;
-}
-
-.footer-info {
-    display: flex;
-    gap: 15px;
-    align-items: center;
+    color: grey;
 }
 
 .footer a {
@@ -89,10 +246,6 @@ h1 {
     font-size: 1.2em;
 }
 
-
-
-
-
-/*//////////////////////*/
-/*        BLOG          */
-/*//////////////////////*/
+.nav-back:hover {
+    text-decoration: underline;
+}
